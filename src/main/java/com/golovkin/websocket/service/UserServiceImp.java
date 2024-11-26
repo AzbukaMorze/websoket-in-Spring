@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -55,5 +56,14 @@ public class UserServiceImp implements UserService {
     public List<User> getUsersByStatus(Status status) {
         return userRepository.findAllByStatus(status);
     }
+
+    @Override
+    public void disconnectUser(User user) {
+        User storedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + user.getId()));
+        storedUser.setStatus(Status.OFFLINE);
+        userRepository.save(storedUser);
+    }
+
 }
 
