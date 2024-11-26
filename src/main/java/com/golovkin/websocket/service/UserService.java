@@ -15,4 +15,5 @@ public interface UserService {
     User updateUser(String id, Status status);
     List<User> getAllUsers();
     List<User> getUsersByStatus(Status status);
+    void disconnectUser(User user);
 }
