@@ -1,14 +1,12 @@
 package com.golovkin.websocket.service;
 
-import com.golovkin.websocket.model.Status;
+import com.golovkin.websocket.model.UserStatus;
 import com.golovkin.websocket.model.User;
 import com.golovkin.websocket.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +19,7 @@ public class UserServiceImp implements UserService {
 //        if (user.getId() == null || user.getId().isEmpty()) {
 //            user.setId(UUID.randomUUID().toString()); // Generate a UUID if no ID is provided
 //        }
-        user.setStatus(Status.ONLINE);
+        user.setUserStatus(UserStatus.ONLINE);
         return userRepository.save(user);
     }
 
@@ -40,10 +38,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User updateUser(String id, Status status) {
+    public User updateUser(String id, UserStatus userStatus) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-        user.setStatus(status);
+        user.setUserStatus(userStatus);
         return userRepository.save(user);
     }
 
@@ -53,15 +51,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<User> getUsersByStatus(Status status) {
-        return userRepository.findAllByStatus(status);
+    public List<User> getUsersByStatus(UserStatus userStatus) {
+        return userRepository.findAllByStatus(userStatus);
     }
 
     @Override
     public void disconnectUser(User user) {
         User storedUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + user.getId()));
-        storedUser.setStatus(Status.OFFLINE);
+        storedUser.setUserStatus(UserStatus.OFFLINE);
         userRepository.save(storedUser);
     }
 

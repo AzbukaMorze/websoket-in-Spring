@@ -1,6 +1,6 @@
 package com.golovkin.websocket.model;
 
-public enum Status {
+public enum UserStatus {
 
     ONLINE, OFFLINE;
 }

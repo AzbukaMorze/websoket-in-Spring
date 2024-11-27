@@ -1,6 +1,6 @@
 package com.golovkin.websocket.service;
 
-import com.golovkin.websocket.model.Status;
+import com.golovkin.websocket.model.UserStatus;
 import com.golovkin.websocket.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +12,8 @@ public interface UserService {
     User saveUser(User user);
     User getUser(String id);
     void deleteUser(String id);
-    User updateUser(String id, Status status);
+    User updateUser(String id, UserStatus userStatus);
     List<User> getAllUsers();
-    List<User> getUsersByStatus(Status status);
+    List<User> getUsersByStatus(UserStatus userStatus);
     void disconnectUser(User user);
 }
