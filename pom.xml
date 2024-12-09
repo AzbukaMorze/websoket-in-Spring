@@ -12,7 +12,7 @@
 	<artifactId>websocket</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>websocket</name>
-	<description>Simple messager</description>
+	<description>Simple message</description>
 	<url/>
 	<licenses>
 		<license/>

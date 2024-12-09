@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
-
-    List<User> findAllByStatus(UserStatus userStatus);
-
+public interface UserRepository  extends MongoRepository<User, String> {
+    List<User> findAllByUserStatus(UserStatus userStatus);
 }
+

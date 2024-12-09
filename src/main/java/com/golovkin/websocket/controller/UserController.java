@@ -34,8 +34,8 @@ public class UserController {
         return user;
     }
 
-    @GetMapping("/api/users")
-    public ResponseEntity<List<User>> getUsers(@RequestParam UserStatus userStatus) {
-        return ResponseEntity.ok(userService.getUsersByStatus(userStatus));
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> findConnectedUsers() {
+        return ResponseEntity.ok(userService.getUsersByStatus(UserStatus.ONLINE));
     }
 }

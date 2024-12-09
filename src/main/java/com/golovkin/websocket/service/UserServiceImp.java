@@ -15,12 +15,12 @@ public class UserServiceImp implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User saveUser(User user) {
+    public void saveUser(User user) {
 //        if (user.getId() == null || user.getId().isEmpty()) {
 //            user.setId(UUID.randomUUID().toString()); // Generate a UUID if no ID is provided
 //        }
         user.setUserStatus(UserStatus.ONLINE);
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public List<User> getUsersByStatus(UserStatus userStatus) {
-        return userRepository.findAllByStatus(userStatus);
+        return userRepository.findAllByUserStatus(userStatus);
     }
 
     @Override
@@ -62,6 +62,7 @@ public class UserServiceImp implements UserService {
         storedUser.setUserStatus(UserStatus.OFFLINE);
         userRepository.save(storedUser);
     }
+
 
 }
 
