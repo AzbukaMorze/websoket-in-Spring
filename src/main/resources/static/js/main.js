@@ -38,7 +38,7 @@ function onConnected() {
     // register the connected user
     stompClient.send("/app/user.addUser",
         {},
-        JSON.stringify({nickName: nickname, fullName: fullname, status: 'ONLINE'})
+        JSON.stringify({nickName: nickname, fullName: fullname, userStatus: 'ONLINE'})
     );
     document.querySelector('#connected-user-fullname').textContent = fullname;
     findAndDisplayConnectedUsers().then();
@@ -180,7 +180,7 @@ function onLogout() {
     stompClient.send("/app/user.disconnectUser",
         {},
         JSON.stringify({nickName: nickname, fullName: fullname, userStatus: 'OFFLINE'})
-    );
+        );
     window.location.reload();
 }
 

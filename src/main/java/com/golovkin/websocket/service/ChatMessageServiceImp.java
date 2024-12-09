@@ -33,29 +33,4 @@ public class ChatMessageServiceImp implements ChatMessageService {
         return chatId.map(chatMessageRepository::findByChatId).orElse(new ArrayList<>());
     }
 
-    @Override
-    public List<ChatMessage> getMessagesByChatId(String chatId) {
-        // Получаем список сообщений в комнате
-        return chatMessageRepository.findByChatId(chatId);
-    }
-
-    @Override
-    public ChatMessage updateMessageStatus(String messageId, ChatMessage.MessageStatus status) {
-        // Обновляем статус сообщения
-        Optional<ChatMessage> messageOpt = chatMessageRepository.findById(messageId);
-
-        if (messageOpt.isEmpty()) {
-            throw new IllegalArgumentException("Message with ID " + messageId + " does not exist.");
-        }
-
-        ChatMessage message = messageOpt.get();
-        message.setStatus(status);
-        return chatMessageRepository.save(message);
-    }
-
-    @Override
-    public void deleteMessageById(String id) {
-        chatMessageRepository.deleteById(id);
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.golovkin.websocket.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,11 +15,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
-    String id;
-
     @Indexed(unique = true)
     String nickName;
 
     String fullName;
+    @JsonProperty("userStatus")
     UserStatus userStatus;
 }

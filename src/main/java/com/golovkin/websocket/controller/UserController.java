@@ -21,14 +21,14 @@ public class UserController {
     private final UserService userService;
 
     @MessageMapping("/user.addUser")
-    @SendTo("/user/topic")
+    @SendTo("/user/public")
     public User addUser(@Payload User user) {
         userService.saveUser(user);
         return user;
     }
 
     @MessageMapping("/user.disconnectUser")
-    @SendTo("/user/topic")
+    @SendTo("/user/public")
     public User disconnect(@Payload User user) {
         userService.disconnectUser(user);
         return user;
@@ -36,6 +36,8 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> findConnectedUsers() {
-        return ResponseEntity.ok(userService.getUsersByStatus(UserStatus.ONLINE));
+        UserStatus userStatus = UserStatus.ONLINE;
+        return ResponseEntity.ok(userService.getUsersByStatus(userStatus));
     }
+
 }

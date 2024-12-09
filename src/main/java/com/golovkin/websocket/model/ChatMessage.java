@@ -1,13 +1,20 @@
 package com.golovkin.websocket.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+
 
 @Data
-@Document(collection = "messages")
+@Document()
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ChatMessage {
     @Id
     private String id;
@@ -15,12 +22,6 @@ public class ChatMessage {
     private String senderId; // Идентификатор отправителя
     private String recipientId; // Идентификатор получателя
     private String content; // Текст сообщения
-    private LocalDateTime timestamp; // Время отправки
-    private MessageStatus status; // Статус сообщения (например, SENT, DELIVERED, READ)
+    private Date timestamp; // Время отправки
 
-    public enum MessageStatus {
-        SENT,
-        DELIVERED,
-        READ
-    }
 }
