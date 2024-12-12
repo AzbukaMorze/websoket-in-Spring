@@ -47,12 +47,25 @@
       </div>
     </form>
   </div>
+
   <div id="context-menu" class="hidden">
     <ul>
       <li id="edit-message">Edit</li>
       <li id="delete-message">Delete</li>
     </ul>
   </div>
+
+  <div id="editMessageModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Edit Message</h2>
+      <textarea id="editMessageInput" rows="4"></textarea>
+      <div class="modal-actions">
+        <button id="saveEditButton">Save</button>
+        <button id="cancelEditButton">Cancel</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
