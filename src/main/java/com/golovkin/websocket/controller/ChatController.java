@@ -2,9 +2,7 @@ package com.golovkin.websocket.controller;
 
 import com.golovkin.websocket.model.ChatMessage;
 import com.golovkin.websocket.model.ChatNotification;
-import com.golovkin.websocket.repository.ChatMessageRepository;
 import com.golovkin.websocket.service.ChatMessageService;
-import com.golovkin.websocket.service.ChatMessageServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;

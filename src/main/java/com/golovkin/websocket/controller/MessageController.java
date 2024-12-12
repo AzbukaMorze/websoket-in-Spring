@@ -16,13 +16,6 @@ public class MessageController {
 
     private final ChatMessageService chatMessageService;
 
-    @GetMapping("/{senderId}/{recipientId}")
-    public ResponseEntity<List<ChatMessage>> findChatMessages(
-            @PathVariable String senderId,
-            @PathVariable String recipientId) {
-        return ResponseEntity.ok(chatMessageService.getChatMessages(senderId, recipientId));
-    }
-
     @DeleteMapping("/{messageId}")
     public ResponseEntity<Void> deleteMessage(@PathVariable String messageId) {
         chatMessageService.deleteMessage(messageId);
