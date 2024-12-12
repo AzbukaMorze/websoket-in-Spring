@@ -5,7 +5,6 @@ import com.golovkin.websocket.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,4 +32,16 @@ public class ChatMessageServiceImp implements ChatMessageService {
         return chatId.map(chatMessageRepository::findByChatId).orElse(new ArrayList<>());
     }
 
+    @Override
+    public Optional<ChatMessage> updateMessage(String messageId, String updatedContent) {
+        ChatMessage message = chatMessageRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("Message not found")); // Добавьте своё исключение
+        message.setContent(updatedContent);
+        return Optional.of(chatMessageRepository.save(message));
+    }
+
+    @Override
+    public void deleteMessage(String messageId) {
+        chatMessageRepository.deleteById(messageId);
+    }
 }
