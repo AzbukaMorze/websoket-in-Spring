@@ -151,7 +151,6 @@ function displayMessage(senderId, content, messageId) {
     chatArea.appendChild(messageContainer);
 }
 
-// Показываем контекстное меню
 function showContextMenu(event, messageId, content) {
     event.preventDefault();
 
@@ -163,7 +162,7 @@ function showContextMenu(event, messageId, content) {
     const editOption = document.querySelector('#edit-message');
     const deleteOption = document.querySelector('#delete-message');
 
-    editOption.onclick = () => editMessage(messageId, content);
+    editOption.onclick = () => openEditModal(messageId, content);  // Обработка редактирования через контекстное меню
     deleteOption.onclick = () => deleteMessage(messageId);
 
     // Скрываем меню при клике вне
@@ -172,12 +171,47 @@ function showContextMenu(event, messageId, content) {
     }, { once: true });
 }
 
-document.addEventListener('contextmenu', (e) => {
-    if (!e.target.closest('.message')) {
-        const contextMenu = document.querySelector('#context-menu');
-        contextMenu.classList.add('hidden');
+let currentMessageId = null;
+
+function openEditModal(messageId, currentContent) {
+    currentMessageId = messageId;
+    document.getElementById('editMessageInput').value = currentContent;
+    document.getElementById('editMessageModal').classList.remove('hidden');
+}
+
+function closeEditModal() {
+    currentMessageId = null;
+    document.getElementById('editMessageInput').value = '';
+    document.getElementById('editMessageModal').classList.add('hidden');
+}
+
+document.getElementById('saveEditButton').addEventListener('click', async () => {
+    const newContent = document.getElementById('editMessageInput').value.trim();
+    console.log(newContent)
+    if (newContent && currentMessageId) {
+        try {
+            // Проверим, что newContent - это строка
+            const response = await fetch(`/messages/${currentMessageId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newContent)
+            });
+
+            if (response.ok) {
+                closeEditModal();
+                fetchAndDisplayUserChat(); // Обновление чата
+            } else {
+                console.error('Failed to edit message:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Failed to edit message:', error);
+        }
     }
 });
+
+
+
+document.getElementById('cancelEditButton').addEventListener('click', closeEditModal);
 
 
 async function fetchAndDisplayUserChat() {
@@ -219,6 +253,7 @@ async function onMessageReceived(payload) {
     await findAndDisplayConnectedUsers();
     console.log('Message received', payload);
     const message = JSON.parse(payload.body);
+
     if (selectedUserId && selectedUserId === message.senderId) {
         displayMessage(message.senderId, message.content);
         chatArea.scrollTop = chatArea.scrollHeight;
@@ -230,13 +265,15 @@ async function onMessageReceived(payload) {
         messageForm.classList.add('hidden');
     }
 
-    const notifiedUser = document.querySelector(`#${message.senderId}`);
+    // Преобразуем senderId в корректный селектор
+    const notifiedUser = document.querySelector(`#user-${message.senderId}`);
     if (notifiedUser && !notifiedUser.classList.contains('active')) {
         const nbrMsg = notifiedUser.querySelector('.nbr-msg');
         nbrMsg.classList.remove('hidden');
         nbrMsg.textContent = '';
     }
 }
+
 
 function onLogout() {
     stompClient.send("/app/user.disconnectUser",
