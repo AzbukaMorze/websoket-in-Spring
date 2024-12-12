@@ -104,7 +104,34 @@ function userItemClick(event) {
 
 }
 
-function displayMessage(senderId, content) {
+async function deleteMessage(messageId) {
+    try {
+        await fetch(`/messages/${messageId}`, {
+            method: 'DELETE'
+        });
+        await fetchAndDisplayUserChat(); // Обновление чата
+    } catch (error) {
+        console.error('Failed to delete message:', error);
+    }
+}
+
+async function editMessage(messageId, currentContent) {
+    const newContent = prompt('Edit your message:', currentContent);
+    if (newContent) {
+        try {
+            await fetch(`/messages/${messageId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newContent)
+            });
+            fetchAndDisplayUserChat(); // Обновление чата
+        } catch (error) {
+            console.error('Failed to edit message:', error);
+        }
+    }
+}
+
+function displayMessage(senderId, content, messageId) {
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message');
     if (senderId === nickname) {
@@ -112,18 +139,53 @@ function displayMessage(senderId, content) {
     } else {
         messageContainer.classList.add('receiver');
     }
+
     const message = document.createElement('p');
     message.textContent = content;
     messageContainer.appendChild(message);
+
+    if (senderId === nickname) {
+        messageContainer.addEventListener('contextmenu', (e) => showContextMenu(e, messageId, content));
+    }
+
     chatArea.appendChild(messageContainer);
 }
+
+// Показываем контекстное меню
+function showContextMenu(event, messageId, content) {
+    event.preventDefault();
+
+    const contextMenu = document.querySelector('#context-menu');
+    contextMenu.style.top = `${event.pageY}px`;
+    contextMenu.style.left = `${event.pageX}px`;
+    contextMenu.classList.remove('hidden');
+
+    const editOption = document.querySelector('#edit-message');
+    const deleteOption = document.querySelector('#delete-message');
+
+    editOption.onclick = () => editMessage(messageId, content);
+    deleteOption.onclick = () => deleteMessage(messageId);
+
+    // Скрываем меню при клике вне
+    document.addEventListener('click', () => {
+        contextMenu.classList.add('hidden');
+    }, { once: true });
+}
+
+document.addEventListener('contextmenu', (e) => {
+    if (!e.target.closest('.message')) {
+        const contextMenu = document.querySelector('#context-menu');
+        contextMenu.classList.add('hidden');
+    }
+});
+
 
 async function fetchAndDisplayUserChat() {
     const userChatResponse = await fetch(`/messages/${nickname}/${selectedUserId}`);
     const userChat = await userChatResponse.json();
     chatArea.innerHTML = '';
     userChat.forEach(chat => {
-        displayMessage(chat.senderId, chat.content);
+        displayMessage(chat.senderId, chat.content, chat.id);
     });
     chatArea.scrollTop = chatArea.scrollHeight;
 }
