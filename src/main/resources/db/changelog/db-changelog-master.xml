@@ -1,0 +1,50 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+
+<!--<databaseChangeLog-->
+<!--        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"-->
+<!--        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-->
+<!--        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">-->
+
+<!--    &lt;!&ndash; ChangeSet 001: Create chatMessage collection &ndash;&gt;-->
+<!--    <changeSet id="001-create-chat-message-collection" author="golovkin">-->
+<!--        <createCollection collectionName="chatMessage"/>-->
+<!--    </changeSet>-->
+
+<!--    &lt;!&ndash; ChangeSet 002: Add fields to chatMessage collection &ndash;&gt;-->
+<!--    <changeSet id="002-add-chat-message-fields" author="golovkin">-->
+<!--        <addField collectionName="chatMessage" fieldName="chatId" type="string"/>-->
+<!--        <addField collectionName="chatMessage" fieldName="senderId" type="string"/>-->
+<!--        <addField collectionName="chatMessage" fieldName="recipientId" type="string"/>-->
+<!--        <addField collectionName="chatMessage" fieldName="content" type="string"/>-->
+<!--        <addField collectionName="chatMessage" fieldName="timestamp" type="date"/>-->
+<!--    </changeSet>-->
+
+<!--    &lt;!&ndash; ChangeSet 003: Create chatRoom collection &ndash;&gt;-->
+<!--    <changeSet id="003-create-chat-room-collection" author="golovkin">-->
+<!--        <createCollection collectionName="chatRoom"/>-->
+<!--    </changeSet>-->
+
+<!--    &lt;!&ndash; ChangeSet 004: Add fields to chatRoom collection &ndash;&gt;-->
+<!--    <changeSet id="004-add-chat-room-fields" author="golovkin">-->
+<!--        <addField collectionName="chatRoom" fieldName="chatId" type="string"/>-->
+<!--        <addField collectionName="chatRoom" fieldName="senderId" type="string"/>-->
+<!--        <addField collectionName="chatRoom" fieldName="recipientId" type="string"/>-->
+<!--    </changeSet>-->
+
+<!--    &lt;!&ndash; ChangeSet 005: Create user collection &ndash;&gt;-->
+<!--    <changeSet id="005-create-user-collection" author="golovkin">-->
+<!--        <createCollection collectionName="user"/>-->
+<!--    </changeSet>-->
+
+<!--    &lt;!&ndash; ChangeSet 006: Add fields to user collection and create index on nickName &ndash;&gt;-->
+<!--    <changeSet id="006-add-user-fields" author="golovkin">-->
+<!--        <addField collectionName="user" fieldName="nickName" type="string"/>-->
+<!--        <addField collectionName="user" fieldName="fullName" type="string"/>-->
+<!--        <addField collectionName="user" fieldName="userStatus" type="string"/>-->
+<!--        <createIndex collectionName="user" indexName="nickName_1" unique="true">-->
+<!--            <indexField name="nickName"/>-->
+<!--        </createIndex>-->
+<!--    </changeSet>-->
+
+<!--</databaseChangeLog>-->

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: websocket
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db-changelog-master.xml
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
+server:
+  port: 8080
