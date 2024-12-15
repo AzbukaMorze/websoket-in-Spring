@@ -19,4 +19,10 @@ public class ChatRoom {
     private String senderId;
     private String recipientId;
 
+    public ChatRoom(String chatId, String senderId, String recipientId) {
+        this.chatId = chatId;
+        this.senderId = senderId;
+        this.recipientId = recipientId;
+    }
+
 }
