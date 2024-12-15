@@ -1,5 +1,6 @@
 package com.golovkin.websocket.service;
 
+import com.golovkin.websocket.exceptions.ChatRoomNotFoundException;
 import com.golovkin.websocket.model.ChatMessage;
 import com.golovkin.websocket.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,15 @@ public class ChatMessageServiceImp implements ChatMessageService {
     public ChatMessage saveMessage(ChatMessage chatMessage) {
         var chatId = chatRoomService
                 .getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true)
-                .orElseThrow(); // You can create your own dedicated exception
+                .orElseThrow(() -> new ChatRoomNotFoundException(
+                        String.format("Chat room not found for senderId %s and recipientId %s",
+                                chatMessage.getSenderId(), chatMessage.getRecipientId())
+                ));
         chatMessage.setChatId(chatId);
         chatMessageRepository.save(chatMessage);
         return chatMessage;
     }
+
 
     @Override
     public List<ChatMessage> getChatMessages(String senderId, String recipientId) {
