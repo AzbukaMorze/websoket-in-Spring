@@ -115,23 +115,9 @@ async function deleteMessage(messageId) {
     }
 }
 
-async function editMessage(messageId, currentContent) {
-    const newContent = prompt('Edit your message:', currentContent);
-    if (newContent) {
-        try {
-            await fetch(`/messages/${messageId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newContent)
-            });
-            fetchAndDisplayUserChat(); // Обновление чата
-        } catch (error) {
-            console.error('Failed to edit message:', error);
-        }
-    }
-}
 
-function displayMessage(senderId, content, messageId) {
+
+function displayMessage(senderId, content, messageId, timestamp) {
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message');
     if (senderId === nickname) {
@@ -140,16 +126,27 @@ function displayMessage(senderId, content, messageId) {
         messageContainer.classList.add('receiver');
     }
 
+    // Добавляем содержимое сообщения
     const message = document.createElement('p');
     message.textContent = content;
     messageContainer.appendChild(message);
 
+    // Добавляем дату сообщения
+    if (timestamp) {
+        const dateElement = document.createElement('span');
+        dateElement.classList.add('timestamp');
+        dateElement.textContent = new Date(timestamp).toLocaleString(); // Форматирование даты
+        messageContainer.appendChild(dateElement);
+    }
+
+    // Добавляем обработчик для контекстного меню (только для отправителя)
     if (senderId === nickname) {
         messageContainer.addEventListener('contextmenu', (e) => showContextMenu(e, messageId, content));
     }
 
     chatArea.appendChild(messageContainer);
 }
+
 
 function showContextMenu(event, messageId, content) {
     event.preventDefault();
@@ -187,14 +184,12 @@ function closeEditModal() {
 
 document.getElementById('saveEditButton').addEventListener('click', async () => {
     const newContent = document.getElementById('editMessageInput').value.trim();
-    console.log(newContent)
     if (newContent && currentMessageId) {
         try {
-            // Проверим, что newContent - это строка
             const response = await fetch(`/messages/${currentMessageId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newContent)
+                body: JSON.stringify(newContent).trim()
             });
 
             if (response.ok) {
@@ -219,7 +214,7 @@ async function fetchAndDisplayUserChat() {
     const userChat = await userChatResponse.json();
     chatArea.innerHTML = '';
     userChat.forEach(chat => {
-        displayMessage(chat.senderId, chat.content, chat.id);
+        displayMessage(chat.senderId, chat.content, chat.id, chat.timestamp);
     });
     chatArea.scrollTop = chatArea.scrollHeight;
 }
@@ -241,7 +236,7 @@ function sendMessage(event) {
             timestamp: new Date()
         };
         stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
-        displayMessage(nickname, messageInput.value.trim());
+        displayMessage(nickname, messageInput.value.trim(), {}, chatMessage.timestamp);
         messageInput.value = '';
     }
     chatArea.scrollTop = chatArea.scrollHeight;
@@ -272,8 +267,28 @@ async function onMessageReceived(payload) {
         nbrMsg.classList.remove('hidden');
         nbrMsg.textContent = '';
     }
+    if (notification.content === null) {
+        // Если контент null, удаляем сообщение из интерфейса
+        removeMessageFromUI(notification.id);
+    } else {
+        // Иначе обновляем содержимое сообщения
+        updateMessageInUI(notification.id, notification.content);
+    }
 }
 
+function removeMessageFromUI(messageId) {
+    const messageElement = document.getElementById(`message-${messageId}`);
+    if (messageElement) {
+        messageElement.remove();
+    }
+}
+
+function updateMessageInUI(messageId, newContent) {
+    const messageElement = document.getElementById(`message-${messageId}`);
+    if (messageElement) {
+        messageElement.querySelector('.message-text').innerText = newContent;
+    }
+}
 
 function onLogout() {
     stompClient.send("/app/user.disconnectUser",
