@@ -194,7 +194,7 @@ document.getElementById('saveEditButton').addEventListener('click', async () => 
 
             if (response.ok) {
                 closeEditModal();
-                fetchAndDisplayUserChat(); // Обновление чата
+                await fetchAndDisplayUserChat();
             } else {
                 console.error('Failed to edit message:', response.statusText);
             }
@@ -266,27 +266,6 @@ async function onMessageReceived(payload) {
         const nbrMsg = notifiedUser.querySelector('.nbr-msg');
         nbrMsg.classList.remove('hidden');
         nbrMsg.textContent = '';
-    }
-    if (notification.content === null) {
-        // Если контент null, удаляем сообщение из интерфейса
-        removeMessageFromUI(notification.id);
-    } else {
-        // Иначе обновляем содержимое сообщения
-        updateMessageInUI(notification.id, notification.content);
-    }
-}
-
-function removeMessageFromUI(messageId) {
-    const messageElement = document.getElementById(`message-${messageId}`);
-    if (messageElement) {
-        messageElement.remove();
-    }
-}
-
-function updateMessageInUI(messageId, newContent) {
-    const messageElement = document.getElementById(`message-${messageId}`);
-    if (messageElement) {
-        messageElement.querySelector('.message-text').innerText = newContent;
     }
 }
 
